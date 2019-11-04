@@ -31,7 +31,7 @@ public class EditorView extends JFrame {
 					  itemCopy,
 					  itemPaste;
 	
-	private JButton btnNew,
+	public JButton btnNew,
 					btnOpen,
 					btnSave,
 					btnSaveAs,
@@ -112,6 +112,7 @@ public class EditorView extends JFrame {
 		btnNew = new JButton("");
 		btnNew.setToolTipText("New");
 		btnNew.setBounds(0, 0, 50, 50);
+		btnNew.setActionCommand("New");
 		ImageIcon iconNewDocument = new ImageIcon(EditorView.class.getResource("/resources/NewIcon.png"));
 		Image imageNewDocument = iconNewDocument.getImage();
 		Image resizedImageNewDocument = imageNewDocument.getScaledInstance(btnNew.getWidth()-10, btnNew.getHeight()-10, Image.SCALE_SMOOTH);
@@ -121,6 +122,7 @@ public class EditorView extends JFrame {
 		btnOpen = new JButton("");
 		btnOpen.setToolTipText("Open");
 		btnOpen.setBounds(0, 0, 50, 50);
+		btnOpen.setActionCommand("Open");
 		ImageIcon iconOpenDocument = new ImageIcon(EditorView.class.getResource("/resources/OpenIcon.png"));
 		Image imageOpenDocument = iconOpenDocument.getImage();
 		Image resizedImageOpenDocument = imageOpenDocument.getScaledInstance(btnOpen.getWidth()-10, btnOpen.getHeight()-10, Image.SCALE_SMOOTH);
@@ -128,6 +130,7 @@ public class EditorView extends JFrame {
 		toolBar.add(btnOpen);
 		
 		btnSave = new JButton("");
+		btnSave.setEnabled(false);
 		btnSave.setToolTipText("Save");
 		btnSave.setBounds(0, 0, 50, 50);
 		ImageIcon iconSaveDocument = new ImageIcon(EditorView.class.getResource("/resources/SaveIcon.png"));
@@ -137,6 +140,7 @@ public class EditorView extends JFrame {
 		toolBar.add(btnSave);
 		
 		btnSaveAs = new JButton("");
+		btnSaveAs.setEnabled(false);
 		btnSaveAs.setToolTipText("Save as");
 		btnSaveAs.setBounds(0, 0, 50, 50);
 		ImageIcon iconSaveAsDocument = new ImageIcon(EditorView.class.getResource("/resources/SaveAsIcon.png"));
@@ -148,6 +152,7 @@ public class EditorView extends JFrame {
 		toolBar.add(new JToolBar.Separator());
 		
 		btnUndo = new JButton("");
+		btnUndo.setEnabled(false);
 		btnUndo.setToolTipText("Undo");
 		btnUndo.setBounds(0, 0, 50, 50);
 		ImageIcon iconUndo = new ImageIcon(EditorView.class.getResource("/resources/UndoIcon.png"));
@@ -157,6 +162,7 @@ public class EditorView extends JFrame {
 		toolBar.add(btnUndo);
 		
 		btnRedo = new JButton("");
+		btnRedo.setEnabled(false);
 		btnRedo.setToolTipText("Redo");
 		btnRedo.setBounds(0, 0, 50, 50);
 		ImageIcon iconRedo = new ImageIcon(EditorView.class.getResource("/resources/RedoIcon.png"));
@@ -168,6 +174,7 @@ public class EditorView extends JFrame {
 		toolBar.add(new JToolBar.Separator());
 		
 		btnCut = new JButton("");
+		btnCut.setEnabled(false);
 		btnCut.setToolTipText("Cut");
 		btnCut.setBounds(0, 0, 50, 50);
 		ImageIcon iconCut = new ImageIcon(EditorView.class.getResource("/resources/CutIcon.png"));
@@ -177,6 +184,7 @@ public class EditorView extends JFrame {
 		toolBar.add(btnCut);
 		
 		btnCopy = new JButton("");
+		btnCopy.setEnabled(false);
 		btnCopy.setToolTipText("Copy");
 		btnCopy.setBounds(0, 0, 50, 50);
 		ImageIcon iconCopy = new ImageIcon(EditorView.class.getResource("/resources/CopyIcon.png"));
@@ -186,6 +194,7 @@ public class EditorView extends JFrame {
 		toolBar.add(btnCopy);
 
 		btnPaste = new JButton("");
+		btnPaste.setEnabled(false);
 		btnPaste.setToolTipText("Paste");
 		btnPaste.setBounds(0, 0, 50, 50);
 		ImageIcon iconPaste = new ImageIcon(EditorView.class.getResource("/resources/PasteIcon.png"));
@@ -200,6 +209,7 @@ public class EditorView extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		JTextPane textPane = new JTextPane();
+		textPane.setEnabled(false);
 		scrollPane.setViewportView(textPane);
 	}
 }
