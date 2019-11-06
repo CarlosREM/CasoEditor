@@ -2,7 +2,7 @@ package main;
 
 import controller.EditorController;
 import model.EditorModel;
-import model.FileOpener;
+import model.FileManager;
 import view.EditorView;
 
 public class Main {

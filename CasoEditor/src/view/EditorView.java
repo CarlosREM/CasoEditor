@@ -14,6 +14,7 @@ import javax.swing.JTextPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import java.awt.Font;
 
 public class EditorView extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -40,6 +41,8 @@ public class EditorView extends JFrame {
 					btnCut,
 					btnCopy,
 					btnPaste;
+	
+	public JTextPane textPane;
 	
 	/**
 	 * Create the frame.
@@ -78,8 +81,8 @@ public class EditorView extends JFrame {
 		JMenu mnEdit = new JMenu("Edit");
 		menuBar.add(mnEdit);
 		
-		itemPaste = new JMenuItem("Paste");
-		mnEdit.add(itemPaste);
+		itemUndo = new JMenuItem("Undo");
+		mnEdit.add(itemUndo);
 		
 		itemRedo = new JMenuItem("Redo");
 		mnEdit.add(itemRedo);
@@ -208,7 +211,8 @@ public class EditorView extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
-		JTextPane textPane = new JTextPane();
+		textPane = new JTextPane();
+		textPane.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textPane.setEnabled(false);
 		scrollPane.setViewportView(textPane);
 	}

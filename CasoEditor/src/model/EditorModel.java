@@ -3,8 +3,15 @@ package model;
 import java.io.File;
 
 public class EditorModel {
-	public void openFile() {
-		File file = FileOpener.openFileChooser();
-		System.out.println("File path: " + file.getPath());
+	
+	private AFileFormat format;
+	
+	public String openFile() throws Exception {
+		File file = FileManager.openFileChooser();
+		if (file != null) {
+			format = FileManager.getFileFormat(file);
+			return format.parseFile();
+		}
+		return null;
 	}
 }

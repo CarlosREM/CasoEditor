@@ -8,8 +8,9 @@ public abstract class AFileFormat{
 
 	public AFileFormat(File file) {
 		this.file = file;
+	
 	}
 
-		
+	public abstract String parseFile() throws Exception;
 	
 }
