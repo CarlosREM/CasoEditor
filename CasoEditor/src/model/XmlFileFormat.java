@@ -13,7 +13,7 @@ public class XmlFileFormat extends AFileFormat {
 	}
 
 	@Override
-	public String parseFile() throws IOException, ParserConfigurationException, SAXException {
+	public void parseFile() throws IOException, ParserConfigurationException, SAXException {
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(file);
@@ -21,17 +21,15 @@ public class XmlFileFormat extends AFileFormat {
 		
 		NodeList nList = doc.getElementsByTagName("text");
         
-		StringBuilder textBuilder = new StringBuilder();
         Node node;
 		for (int i = 0; i < nList.getLength(); i++) {
            node = nList.item(i);
            if (node.getNodeType() == Node.ELEMENT_NODE) {
         	   Element elem = (Element) node;
-        	   System.out.println(elem.getAttribute("color"));
-        	   textBuilder.append(elem.getTextContent());
+        	   addColor(elem.getAttribute("color"));
+        	   addText(elem.getTextContent());
            }
         }
-		return textBuilder.toString();
 	}
 
 }

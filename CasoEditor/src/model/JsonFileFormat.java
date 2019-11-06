@@ -15,35 +15,29 @@ public class JsonFileFormat extends AFileFormat {
 	}
 
 	@Override
-	public String parseFile() throws IOException {
+	public void parseFile() throws IOException {
 	    InputStream stream = new FileInputStream(file);
 	    JsonReader reader = new JsonReader(new InputStreamReader(stream, "UTF-8"));
 	    
-	    StringBuilder textBuilder = new StringBuilder();
 	    reader.beginArray();
 	    while (reader.hasNext())
-	    	textBuilder.append(readJsonElement(reader));
+	    	readJsonElement(reader);
 	    
 	    reader.endArray();
 	    reader.close();
 	    
-	    return textBuilder.toString();
 	}
 	
-	public String readJsonElement(JsonReader reader) throws IOException {
-		String text = "";
-		
+	public void readJsonElement(JsonReader reader) throws IOException {
 	    reader.beginObject();
 	    String name;
 	    while (reader.hasNext()) {
 	    	name = reader.nextName();
 	    	if (name.equals("color"))
-	    		System.out.println(reader.nextString());
+	    		addColor(reader.nextString());
 	    	else if (name.equals("spelling"))
-	    		text = reader.nextString();
+	    		addText(reader.nextString());
 	    }
 	    reader.endObject();
-
-		return text;
 	}
 }

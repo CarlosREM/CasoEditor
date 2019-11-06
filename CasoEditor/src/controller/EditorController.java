@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
 
+import model.AFileFormat;
 import model.EditorModel;
 import view.EditorView;
 
@@ -43,8 +44,8 @@ public class EditorController implements ActionListener{
 		switch(arg0.getActionCommand()) {
 			case "Open":
 				try {
-					String text = model.openFile();
-					view.textPane.setText(text);
+					model.openFile();
+					view.setTextPaneText(model.getFormat().getText(), model.getFormat().getColor());
 					enableScreen();
 				}
 				catch(Exception ex) {

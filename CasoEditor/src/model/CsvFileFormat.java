@@ -13,7 +13,7 @@ public class CsvFileFormat extends AFileFormat {
 	}
 
 	@Override
-	public String parseFile() throws FileNotFoundException, IOException {
+	public void parseFile() throws FileNotFoundException, IOException {
 		BufferedReader csvReader = new BufferedReader(new FileReader(file.getAbsolutePath()));
 		String line;
 		StringBuilder textBuilder = new StringBuilder();
@@ -24,7 +24,8 @@ public class CsvFileFormat extends AFileFormat {
 		}
 		csvReader.close();
 		
-		return textBuilder.toString();
+		addColor("black");
+		addText(textBuilder.toString());
 	}
 
 }

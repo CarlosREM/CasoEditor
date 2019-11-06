@@ -7,30 +7,27 @@ import javax.swing.JPanel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
-import javax.swing.JMenuBar;
 import javax.swing.JToolBar;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.MutableAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
+import model.EditorModel;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import java.awt.Font;
+import java.awt.Color;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 
 public class EditorView extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private JPanel contentPane;
-
-	private JMenuItem itemNew,
-					  itemOpen,
-					  itemSave,
-					  itemSaveAs,
-					  itemExit,
-					  itemUndo,
-					  itemRedo,
-					  itemCut,
-					  itemCopy,
-					  itemPaste;
 	
 	public JButton btnNew,
 					btnOpen,
@@ -40,9 +37,16 @@ public class EditorView extends JFrame {
 					btnRedo,
 					btnCut,
 					btnCopy,
-					btnPaste;
+					btnPaste,
+					btnColorBlack,
+					btnColorRed,
+					btnColorGreen,
+					btnColorBlue,
+					btnColorOrange;
 	
 	public JTextPane textPane;
+	
+	private Color fontColor = Color.BLACK;
 	
 	/**
 	 * Create the frame.
@@ -51,53 +55,6 @@ public class EditorView extends JFrame {
 		setTitle("Memento editor");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 500);
-		
-		// MENU BAR
-		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-		
-		itemNew = new JMenuItem("New");
-		mnFile.add(itemNew);
-		
-		itemOpen = new JMenuItem("Open");
-		mnFile.add(itemOpen);
-		
-		itemSave = new JMenuItem("Save");
-		mnFile.add(itemSave);
-		
-		itemSaveAs = new JMenuItem("Save As...");
-		mnFile.add(itemSaveAs);
-		
-		JSeparator itemFileSeparator = new JSeparator();
-		mnFile.add(itemFileSeparator);
-		
-		itemExit = new JMenuItem("Exit");
-		mnFile.add(itemExit);
-		
-		JMenu mnEdit = new JMenu("Edit");
-		menuBar.add(mnEdit);
-		
-		itemUndo = new JMenuItem("Undo");
-		mnEdit.add(itemUndo);
-		
-		itemRedo = new JMenuItem("Redo");
-		mnEdit.add(itemRedo);
-		
-		JSeparator itemEditSeparator = new JSeparator();
-		mnEdit.add(itemEditSeparator);
-		
-		itemCut = new JMenuItem("Cut");
-		mnEdit.add(itemCut);
-		
-		itemCopy = new JMenuItem("Copy");
-		mnEdit.add(itemCopy);
-		
-		itemPaste = new JMenuItem("Paste");
-		mnEdit.add(itemPaste);
 		
 		// CONTENT PANE
 		
@@ -206,6 +163,78 @@ public class EditorView extends JFrame {
 		btnPaste.setIcon(new ImageIcon(resizedImagePaste));
 		toolBar.add(btnPaste);
 		
+		toolBar.add(new JToolBar.Separator());
+
+		btnColorBlack = new JButton();
+		//btnColorBlack.setEnabled(false);
+		btnColorBlack.setBounds(0, 0, 100, 100);
+		btnColorBlack.setBackground(Color.BLACK);
+		btnColorBlack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fontColor != Color.BLACK) {
+					fontColor = Color.BLACK;
+					setTextPaneColor(Color.BLACK);
+				}
+			}
+		});
+		toolBar.add(btnColorBlack);
+		
+		btnColorRed = new JButton();
+		//btnColorRed.setEnabled(false);
+		btnColorRed.setBounds(0, 0, 100, 100);
+		btnColorRed.setBackground(Color.RED);
+		btnColorRed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fontColor != Color.RED) {
+					fontColor = Color.RED;
+					setTextPaneColor(Color.RED);
+				}
+			}
+		});
+		toolBar.add(btnColorRed);
+		
+		btnColorGreen = new JButton();
+		//btnColorGreen.setEnabled(false);
+		btnColorGreen.setBounds(0, 0, 100, 100);
+		btnColorGreen.setBackground(Color.GREEN);
+		btnColorGreen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fontColor != Color.GREEN) {
+					fontColor = Color.GREEN;
+					setTextPaneColor(Color.GREEN);
+				}
+			}
+		});
+		toolBar.add(btnColorGreen);
+		
+		btnColorBlue = new JButton();
+		//btnColorBlue.setEnabled(false);
+		btnColorBlue.setBounds(0, 0, 100, 100);
+		btnColorBlue.setBackground(Color.BLUE);
+		btnColorBlue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fontColor != Color.BLUE) {
+					fontColor = Color.BLUE;
+					setTextPaneColor(Color.BLUE);
+				}
+			}
+		});
+		toolBar.add(btnColorBlue);
+		
+		btnColorOrange = new JButton();
+		//btnColorOrange.setEnabled(false);
+		btnColorOrange.setBounds(0, 0, 100, 100);
+		btnColorOrange.setBackground(Color.ORANGE);
+		btnColorOrange.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (fontColor != Color.ORANGE) {
+					fontColor = Color.ORANGE;
+					setTextPaneColor(Color.ORANGE);
+				}
+			}
+		});
+		toolBar.add(btnColorOrange);
+		
 		// TEXT PANE
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -215,5 +244,39 @@ public class EditorView extends JFrame {
 		textPane.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textPane.setEnabled(false);
 		scrollPane.setViewportView(textPane);
+	}
+	
+	private void setTextPaneColor(Color color) {
+        // Get previous attributes, just in case
+        MutableAttributeSet attrs = textPane.getInputAttributes();
+
+        // Set the font color
+        StyleConstants.setForeground(attrs, color);
+
+        // Retrieve the pane's document object
+        StyledDocument doc = textPane.getStyledDocument();
+        
+        doc.setCharacterAttributes(doc.getLength(), 0, attrs, false);
+	}
+	
+	private void textPaneAddText(String newText) {
+		try {
+			StyledDocument doc = textPane.getStyledDocument();
+			doc.insertString(doc.getLength(), newText, textPane.getInputAttributes());
+		}
+		catch(BadLocationException exc) {
+			exc.printStackTrace();
+		}
+	}
+	
+	public void setTextPaneText(ArrayList<String> text, ArrayList<String> color) {
+		textPane.setText("");
+		
+		String currentText;
+		for (int i = 0; i < text.size(); i++) {
+			currentText = text.get(i);
+			setTextPaneColor(EditorModel.getColor(color.get(i)));
+			textPaneAddText(currentText);
+		}
 	}
 }

@@ -11,7 +11,7 @@ public class TabFileFormat extends AFileFormat {
 	}
 
 	@Override
-	public String parseFile() throws Exception {
+	public void parseFile() throws Exception {
 		FileReader fr = new FileReader(file);
 	    BufferedReader br = new BufferedReader(fr);
 	    StringBuilder textBuilder = new StringBuilder();
@@ -24,7 +24,8 @@ public class TabFileFormat extends AFileFormat {
 	    }
 		br.close();
 		
-		return textBuilder.toString();
+		addColor("black");
+		addText(textBuilder.toString());
 	}
 
 }

@@ -11,7 +11,7 @@ public class TxtFileFormat extends AFileFormat {
 	}
 
 	@Override
-	public String parseFile() throws FileNotFoundException {
+	public void parseFile() throws FileNotFoundException {
 		Scanner scanner = new Scanner(file);
 		StringBuilder txtBuilder = new StringBuilder();
 		while (scanner.hasNext()) {
@@ -19,7 +19,8 @@ public class TxtFileFormat extends AFileFormat {
 		}
 		scanner.close();
 		
-		return txtBuilder.toString();
+		addColor("black");
+		addText(txtBuilder.toString());
 	}
 
 }
