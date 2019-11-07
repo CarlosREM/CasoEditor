@@ -4,12 +4,20 @@ import java.awt.Color;
 import java.io.File;
 import java.lang.reflect.Field;
 
+import patterns.Caretaker;
+import patterns.Originator;
+
 public class EditorModel {
 	
 	private AFileFormat format = null;
+	private Originator originator;	
 	
 	public AFileFormat getFormat() {
 		return format;
+	}
+
+	public EditorModel() {
+		this.originator = new Originator();
 	}
 
 	public void openFile() throws Exception {
@@ -31,4 +39,9 @@ public class EditorModel {
 		}
 		return color;
 	}
+	
+	public void saveMemento(String textSave) {
+		Caretaker.getInstance().addPreviousMemento(originator.createMemento(textSave));
+	}
+	
 }

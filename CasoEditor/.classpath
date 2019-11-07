@@ -4,7 +4,7 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.6.jar" sourcepath="lib/gson-2.8.6.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/CasoEditor/lib/gson-2.8.6-javadoc.jar!/"/>
+			<attribute name="javadoc_location" value="jar:file:/C:/Users/Gómez%20Montero/Desktop/CasoEditor/CasoEditor/lib/gson-2.8.6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="bin"/>

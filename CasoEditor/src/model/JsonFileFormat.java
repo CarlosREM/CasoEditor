@@ -13,7 +13,7 @@ public class JsonFileFormat extends AFileFormat {
 	public JsonFileFormat(File file) {
 		super(file);		
 	}
-
+	
 	@Override
 	public void parseFile() throws IOException {
 	    InputStream stream = new FileInputStream(file);
