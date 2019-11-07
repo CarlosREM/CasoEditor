@@ -14,7 +14,7 @@ public class EditorController implements ActionListener, Runnable{
 
 	private final EditorModel model;
 	private final EditorView view;
-	private static boolean enableEditor = false;
+	private static boolean editorEnabled = false;
 	private static final int mementoTimeSave = 2000;
 	
 	public EditorController(EditorModel model, EditorView view) {
@@ -30,13 +30,20 @@ public class EditorController implements ActionListener, Runnable{
 	}
 
 
-	public void initiliazeListeners() {
+	public void initializeListeners() {
 		this.view.btnNew.addActionListener(this);
 		this.view.btnOpen.addActionListener(this);
+		this.view.btnSave.addActionListener(this);
+		this.view.btnSaveAs.addActionListener(this);
+		this.view.btnUndo.addActionListener(this);
+		this.view.btnRedo.addActionListener(this);
+		this.view.btnCut.addActionListener(this);
+		this.view.btnCopy.addActionListener(this);
+		this.view.btnPaste.addActionListener(this);
 	}
 	
 	public void start() {
-		initiliazeListeners();
+		initializeListeners();
 		this.view.setVisible(true);
 	}
 
@@ -47,7 +54,8 @@ public class EditorController implements ActionListener, Runnable{
 				try {
 					model.openFile();
 					view.setTextPaneText(model.getFormat().getText(), model.getFormat().getColor());
-					enableScreen();
+					view.setEnabled(true);
+					view.btnSave.setEnabled(true);
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
@@ -55,44 +63,53 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				break;
 			case "New":
-				//Hay que mostrar mensaje de que se va a perder todo lo que no tenga guardado
-				//Luego se limpia el textarea
+				if (model.getFormat() != null || !view.isEmpty()) {
+					int choice = JOptionPane.showConfirmDialog(view, "Any changes will be lost. Continue?",
+															   "New Document", JOptionPane.YES_NO_OPTION);
+					if (choice == JOptionPane.NO_OPTION)
+						return;
+				}
 				
-				if(!enableEditor) 
-					enableScreen();
+				
+				if(!editorEnabled) 
+					view.setEnabled(true);
 				else 
 					restartTextEditor();
+				
+				view.btnSave.setEnabled(false);
 				startBackgroundThread();
 				break;
+				
+			case "Save":
+				try {
+					model.saveDocument(view.getStyledDocument());
+				}
+				catch(Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.WARNING_MESSAGE);
+				}
+				break;
+				
 			default:
+				System.out.println("oops");
 				break;
 		}
 		
 	}
 	
 	private void restartTextEditor() {
-		enableEditor = false;
+		editorEnabled = false;
 		try {
 			Thread.sleep(mementoTimeSave+1500);
 			Caretaker.getInstance().restartStacks();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	private void enableScreen() {
-		view.btnSave.setEnabled(true);
-		view.btnSaveAs.setEnabled(true);
-		view.btnCut.setEnabled(true);
-		view.btnCopy.setEnabled(true);
-		view.btnUndo.setEnabled(true);
-		view.btnRedo.setEnabled(true);
-		view.textPane.setEnabled(true);
-	}
-	
 	public void startBackgroundThread() {
-		enableEditor = true;
+		editorEnabled = true;
 		Runnable mainRunnable = this;
 		Thread mainThread = new Thread(mainRunnable);
 		mainThread.start();
@@ -101,7 +118,7 @@ public class EditorController implements ActionListener, Runnable{
 	@Override
 	public void run() {
 		try {
-			while (enableEditor) {
+			while (editorEnabled) {
 				model.saveMemento(view.textPane.getText());
 				Thread.sleep(mementoTimeSave);
 			}
