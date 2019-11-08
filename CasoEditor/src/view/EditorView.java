@@ -251,6 +251,7 @@ public class EditorView extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		
 		textPane = new JTextPane();
+		textPane.setForeground(Color.BLACK);
 		textPane.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textPane.setEnabled(false);
 		scrollPane.setViewportView(textPane);
@@ -299,6 +300,7 @@ public class EditorView extends JFrame {
 	}
 	
 	public void setEnabled(boolean value) {
+		btnSave.setEnabled(value);
 		btnSaveAs.setEnabled(value);
 		btnCut.setEnabled(value);
 		btnCopy.setEnabled(value);

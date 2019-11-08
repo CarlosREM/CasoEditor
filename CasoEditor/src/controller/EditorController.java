@@ -71,18 +71,28 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				
 				
-				if(!editorEnabled) 
+				if(!editorEnabled)
 					view.setEnabled(true);
-				else 
+				else
 					restartTextEditor();
 				
-				view.btnSave.setEnabled(false);
+				view.textPane.setText("");
 				startBackgroundThread();
 				break;
 				
 			case "Save":
 				try {
-					model.saveDocument(view.getStyledDocument());
+					model.saveDocument(view.getStyledDocument(), false);
+				}
+				catch(Exception ex) {
+					ex.printStackTrace();
+					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.WARNING_MESSAGE);
+				}
+				break;
+				
+			case "Save as":
+				try {
+					model.saveDocument(view.getStyledDocument(), true);
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
@@ -123,9 +133,10 @@ public class EditorController implements ActionListener, Runnable{
 				Thread.sleep(mementoTimeSave);
 			}
 			Thread.currentThread().interrupt();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+		}
+		catch (InterruptedException e) {
 			e.printStackTrace();
+			startBackgroundThread();
 		}
 	}
 }

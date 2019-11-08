@@ -39,19 +39,21 @@ public class EditorModel {
 		Caretaker.getInstance().addPreviousMemento(originator.createMemento(textSave));
 	}
 	
-	public void saveDocument(StyledDocument doc) throws Exception {
+	public void saveDocument(StyledDocument doc, boolean saveAs) throws Exception {
+		if (format == null || saveAs) {
+			File file = FileManager.saveFileChooser();
+			if (file != null) {
+				format = FileManager.getFileFormat(file);
+			}
+			else
+				return;
+		}
 		format.clearText();
 		format.clearColor();
 		
 		parseStyledDocument(doc);
 		
 		format.saveFile();
-	}
-	
-	public void saveDocument(StyledDocument doc, File file) {
-		format = FileManager.getFileFormat(file);
-		parseStyledDocument(doc);
-		//format.saveFile();
 	}
 	
 	private void parseStyledDocument(StyledDocument doc) {
@@ -67,6 +69,7 @@ public class EditorModel {
 				
 				if (i == 0)
 					format.addColor(color.name());
+				
 				else if (color.name() != format.getColor(colorIndex)) {
 					format.addText(textBuilder.toString());
 					textBuilder = new StringBuilder();
@@ -81,6 +84,7 @@ public class EditorModel {
 		}
 		catch(Exception ex) {
 			System.out.println("fuck");
+			ex.printStackTrace();
 		}
 	}
 	
