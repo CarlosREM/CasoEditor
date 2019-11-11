@@ -7,5 +7,8 @@
 			<attribute name="javadoc_location" value="jar:file:/C:/Users/Gómez%20Montero/Desktop/CasoEditor/CasoEditor/lib/gson-2.8.6-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/itextpdf-5.5.13.1.jar" sourcepath="lib/itextpdf-5.5.13.1.jar"/>
+	<classpathentry kind="lib" path="lib/pdfbox-2.0.17.jar" sourcepath="lib/pdfbox-2.0.17.jar"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk15on-1.56.jar" sourcepath="lib/bcprov-jdk15on-1.56.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

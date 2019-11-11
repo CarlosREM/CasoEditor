@@ -87,6 +87,9 @@ public class FileManager {
 				format = new XmlFileFormat(file);
 				break;
 				
+			case "pdf":
+				format = new PDFFileFormat(file);
+				break;
 			default:
 				format = null;
 		}
