@@ -18,6 +18,10 @@ public class EditorModel {
 	public AFileFormat getFormat() {
 		return format;
 	}
+	public void setFormat(AFileFormat format) {
+		this.format = format;
+	}
+
 
 	public EditorModel() {
 		this.originator = new Originator();

@@ -1,11 +1,14 @@
 package controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
 import model.AFileFormat;
+import model.ClipboardManager;
 import model.EditorModel;
 import patterns.Caretaker;
 import view.EditorView;
@@ -49,6 +52,7 @@ public class EditorController implements ActionListener, Runnable{
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+		int start, end;
 		switch(arg0.getActionCommand()) {
 			case "Open":
 				try {
@@ -59,7 +63,7 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Error on file opening", "Error", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(view, "Error on file opening", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 			case "New":
@@ -79,6 +83,7 @@ public class EditorController implements ActionListener, Runnable{
 					restartTextEditor();
 				
 				view.textPane.setText("");
+				model.setFormat(null);
 				startBackgroundThread();
 				break;
 				
@@ -88,7 +93,7 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 				
@@ -98,7 +103,7 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				catch(Exception ex) {
 					ex.printStackTrace();
-					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 				
@@ -109,11 +114,49 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				break;
 				
+			case "Cut": case "Copy":
+				start = view.textPane.getSelectionStart();
+				end = view.textPane.getSelectionEnd();
+				
+				if (start != end) {
+					boolean result = ClipboardManager.saveClipboard(view.getStyledDocument(), start, end);
+					if (!result) {
+						JOptionPane.showMessageDialog(view, "Error on Copying text", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+					else {
+						if (arg0.getActionCommand().equals("Cut"))
+							view.deleteSelectedText();
+						
+						if (!view.btnPaste.isEnabled())
+							view.btnPaste.setEnabled(true);
+					}
+				}
+				break;
+				
+			case "Paste":
+				start = view.textPane.getSelectionStart();
+				end = view.textPane.getSelectionEnd();
+				if (start != end)
+					view.deleteSelectedText();
+				pasteClipboard(start);
+				break;
+				
 			default:
 				System.out.println("oops");
 				break;
 		}
 		
+	}
+
+	private void pasteClipboard(int pos) {
+		ArrayList<Color> color = ClipboardManager.getColors();
+		ArrayList<String> text = ClipboardManager.getText();
+		
+		for (int i = 0; i < color.size(); i++) {
+			view.setTextPaneColor(color.get(i));
+			view.textPaneAddText(text.get(i), pos);
+			pos += text.get(i).length();
+		}
 	}
 	
 	private void restartTextEditor() {

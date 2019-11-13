@@ -5,16 +5,15 @@ import java.awt.Image;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JToggleButton;
 import javax.swing.ImageIcon;
 import java.awt.BorderLayout;
 import javax.swing.JToolBar;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AbstractDocument.LeafElement;
-import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.MutableAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
+import javax.swing.text.AbstractDocument.LeafElement;
 
 import model.EditorModel;
 
@@ -24,8 +23,9 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.awt.event.ActionEvent;
+import javax.swing.event.CaretListener;
+import javax.swing.event.CaretEvent;
 
 public class EditorView extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -33,19 +33,20 @@ public class EditorView extends JFrame {
 	private JPanel contentPane;
 	
 	public JButton btnNew,
-					btnOpen,
-					btnSave,
-					btnSaveAs,
-					btnUndo,
-					btnRedo,
-					btnCut,
-					btnCopy,
-					btnPaste,
-					btnColorBlack,
-					btnColorRed,
-					btnColorGreen,
-					btnColorBlue,
-					btnColorOrange;
+				   btnOpen,
+				   btnSave,
+				   btnSaveAs,
+				   btnUndo,
+				   btnRedo,
+				   btnCut,
+				   btnCopy,
+				   btnPaste;
+	
+	private JToggleButton btnColorBlack,
+						  btnColorRed,
+						  btnColorGreen,
+						  btnColorBlue,
+						  btnColorOrange;
 	
 	public JTextPane textPane;
 	
@@ -72,175 +73,188 @@ public class EditorView extends JFrame {
 		toolBar.setFloatable(false);
 		contentPane.add(toolBar, BorderLayout.NORTH);
 		
+		ImageIcon imgIcon;
+		Image img, rImg;
+		
 		btnNew = new JButton("");
-		btnNew.setToolTipText("New");
 		btnNew.setBounds(0, 0, 50, 50);
+		btnNew.setToolTipText("New");
 		btnNew.setActionCommand("New");
-		ImageIcon iconNewDocument = new ImageIcon(EditorView.class.getResource("/resources/NewIcon.png"));
-		Image imageNewDocument = iconNewDocument.getImage();
-		Image resizedImageNewDocument = imageNewDocument.getScaledInstance(btnNew.getWidth()-10, btnNew.getHeight()-10, Image.SCALE_SMOOTH);
-		btnNew.setIcon(new ImageIcon(resizedImageNewDocument));
+		btnNew.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/NewIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnNew.getWidth()-10, btnNew.getHeight()-10, Image.SCALE_SMOOTH);
+		btnNew.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnNew);
 		
 		btnOpen = new JButton("");
-		btnOpen.setToolTipText("Open");
 		btnOpen.setBounds(0, 0, 50, 50);
+		btnOpen.setToolTipText("Open");
 		btnOpen.setActionCommand("Open");
-		ImageIcon iconOpenDocument = new ImageIcon(EditorView.class.getResource("/resources/OpenIcon.png"));
-		Image imageOpenDocument = iconOpenDocument.getImage();
-		Image resizedImageOpenDocument = imageOpenDocument.getScaledInstance(btnOpen.getWidth()-10, btnOpen.getHeight()-10, Image.SCALE_SMOOTH);
-		btnOpen.setIcon(new ImageIcon(resizedImageOpenDocument));
+		btnOpen.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/OpenIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnOpen.getWidth()-10, btnOpen.getHeight()-10, Image.SCALE_SMOOTH);
+		btnOpen.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnOpen);
 		
 		btnSave = new JButton("");
-		btnSave.setEnabled(false);
-		btnSave.setToolTipText("Save");
 		btnSave.setBounds(0, 0, 50, 50);
+		btnSave.setToolTipText("Save");
 		btnSave.setActionCommand("Save");
-		ImageIcon iconSaveDocument = new ImageIcon(EditorView.class.getResource("/resources/SaveIcon.png"));
-		Image imageSaveDocument = iconSaveDocument.getImage();
-		Image resizedImageSaveDocument = imageSaveDocument.getScaledInstance(btnSave.getWidth()-10, btnSave.getHeight()-10, Image.SCALE_SMOOTH);
-		btnSave.setIcon(new ImageIcon(resizedImageSaveDocument));
+		btnSave.setEnabled(false);
+		btnSave.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/SaveIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnSave.getWidth()-10, btnSave.getHeight()-10, Image.SCALE_SMOOTH);
+		btnSave.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnSave);
 		
 		btnSaveAs = new JButton("");
-		btnSaveAs.setEnabled(false);
-		btnSaveAs.setToolTipText("Save as");
 		btnSaveAs.setBounds(0, 0, 50, 50);
+		btnSaveAs.setToolTipText("Save as");
 		btnSaveAs.setActionCommand("Save as");
-		ImageIcon iconSaveAsDocument = new ImageIcon(EditorView.class.getResource("/resources/SaveAsIcon.png"));
-		Image imageSaveAsDocument = iconSaveAsDocument.getImage();
-		Image resizedImageSaveAsDocument = imageSaveAsDocument.getScaledInstance(btnSaveAs.getWidth()-10, btnSaveAs.getHeight()-10, Image.SCALE_SMOOTH);
-		btnSaveAs.setIcon(new ImageIcon(resizedImageSaveAsDocument));
+		btnSaveAs.setEnabled(false);
+		btnSaveAs.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/SaveAsIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnSaveAs.getWidth()-10, btnSaveAs.getHeight()-10, Image.SCALE_SMOOTH);
+		btnSaveAs.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnSaveAs);
 		
 		toolBar.add(new JToolBar.Separator());
 		
 		btnUndo = new JButton("");
-		btnUndo.setEnabled(false);
-		btnUndo.setToolTipText("Undo");
 		btnUndo.setBounds(0, 0, 50, 50);
+		btnUndo.setToolTipText("Undo");
 		btnUndo.setActionCommand("Undo");
-		ImageIcon iconUndo = new ImageIcon(EditorView.class.getResource("/resources/UndoIcon.png"));
-		Image imageUndo = iconUndo.getImage();
-		Image resizedImageUndo = imageUndo.getScaledInstance(btnUndo.getWidth()-10, btnUndo.getHeight()-10, Image.SCALE_SMOOTH);
-		btnUndo.setIcon(new ImageIcon(resizedImageUndo));
+		btnUndo.setEnabled(false);
+		btnUndo.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/UndoIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnUndo.getWidth()-10, btnUndo.getHeight()-10, Image.SCALE_SMOOTH);
+		btnUndo.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnUndo);
 		
 		btnRedo = new JButton("");
-		btnRedo.setEnabled(false);
-		btnRedo.setToolTipText("Redo");
 		btnRedo.setBounds(0, 0, 50, 50);
+		btnRedo.setToolTipText("Redo");
 		btnRedo.setActionCommand("Redo");
-		ImageIcon iconRedo = new ImageIcon(EditorView.class.getResource("/resources/RedoIcon.png"));
-		Image imageRedo = iconRedo.getImage();
-		Image resizedImageRedo = imageRedo.getScaledInstance(btnRedo.getWidth()-10, btnRedo.getHeight()-10, Image.SCALE_SMOOTH);
-		btnRedo.setIcon(new ImageIcon(resizedImageRedo));
+		btnRedo.setEnabled(false);
+		btnRedo.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/RedoIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnRedo.getWidth()-10, btnRedo.getHeight()-10, Image.SCALE_SMOOTH);
+		btnRedo.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnRedo);
 		
 		toolBar.add(new JToolBar.Separator());
 		
 		btnCut = new JButton("");
-		btnCut.setEnabled(false);
-		btnCut.setToolTipText("Cut");
 		btnCut.setBounds(0, 0, 50, 50);
+		btnCut.setToolTipText("Cut");
 		btnCut.setActionCommand("Cut");
-		ImageIcon iconCut = new ImageIcon(EditorView.class.getResource("/resources/CutIcon.png"));
-		Image imageCut = iconCut.getImage();
-		Image resizedImageCut = imageCut.getScaledInstance(btnCut.getWidth()-10, btnCut.getHeight()-10, Image.SCALE_SMOOTH);
-		btnCut.setIcon(new ImageIcon(resizedImageCut));
+		btnCut.setEnabled(false);
+		btnCut.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/CutIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnCut.getWidth()-10, btnCut.getHeight()-10, Image.SCALE_SMOOTH);
+		btnCut.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnCut);
 		
 		btnCopy = new JButton("");
-		btnCopy.setEnabled(false);
-		btnCopy.setToolTipText("Copy");
 		btnCopy.setBounds(0, 0, 50, 50);
+		btnCopy.setToolTipText("Copy");
 		btnCopy.setActionCommand("Copy");
-		ImageIcon iconCopy = new ImageIcon(EditorView.class.getResource("/resources/CopyIcon.png"));
-		Image imageCopy = iconCopy.getImage();
-		Image resizedImageCopy = imageCopy.getScaledInstance(btnCopy.getWidth()-10, btnCopy.getHeight()-10, Image.SCALE_SMOOTH);
-		btnCopy.setIcon(new ImageIcon(resizedImageCopy));
+		btnCopy.setEnabled(false);
+		btnCopy.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/CopyIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnCopy.getWidth()-10, btnCopy.getHeight()-10, Image.SCALE_SMOOTH);
+		btnCopy.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnCopy);
 
 		btnPaste = new JButton("");
-		btnPaste.setEnabled(false);
-		btnPaste.setToolTipText("Paste");
 		btnPaste.setBounds(0, 0, 50, 50);
+		btnPaste.setToolTipText("Paste");
 		btnPaste.setActionCommand("Paste");
-		ImageIcon iconPaste = new ImageIcon(EditorView.class.getResource("/resources/PasteIcon.png"));
-		Image imagePaste = iconPaste.getImage();
-		Image resizedImagePaste = imagePaste.getScaledInstance(btnPaste.getWidth()-10, btnPaste.getHeight()-10, Image.SCALE_SMOOTH);
-		btnPaste.setIcon(new ImageIcon(resizedImagePaste));
+		btnPaste.setEnabled(false);
+		btnPaste.setFocusable(false);
+		imgIcon = new ImageIcon(EditorView.class.getResource("/resources/PasteIcon.png"));
+		img = imgIcon.getImage();
+		rImg = img.getScaledInstance(btnPaste.getWidth()-10, btnPaste.getHeight()-10, Image.SCALE_SMOOTH);
+		btnPaste.setIcon(new ImageIcon(rImg));
 		toolBar.add(btnPaste);
 		
 		toolBar.add(new JToolBar.Separator());
 
-		btnColorBlack = new JButton();
-		btnColorBlack.setEnabled(false);
+		btnColorBlack = new JToggleButton();
 		btnColorBlack.setBounds(0, 0, 100, 100);
+		btnColorBlack.setEnabled(false);
+		btnColorBlack.setFocusable(false);
+		btnColorBlack.setSelected(true);
 		btnColorBlack.setBackground(Color.BLACK);
 		btnColorBlack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (fontColor != Color.BLACK) {
-					fontColor = Color.BLACK;
-					setTextPaneColor(Color.BLACK);
-				}
+				fontColor = Color.BLACK;
+				setTextPaneColor(Color.BLACK);
+				colorButtonSelected();
 			}
 		});
 		toolBar.add(btnColorBlack);
 		
-		btnColorRed = new JButton();
-		btnColorRed.setEnabled(false);
+		btnColorRed = new JToggleButton();
 		btnColorRed.setBounds(0, 0, 100, 100);
+		btnColorRed.setEnabled(false);
+		btnColorRed.setFocusable(false);
 		btnColorRed.setBackground(Color.RED);
 		btnColorRed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (fontColor != Color.RED) {
-					fontColor = Color.RED;
-					setTextPaneColor(Color.RED);
-				}
+				fontColor = Color.RED;
+				setTextPaneColor(Color.RED);
+				colorButtonSelected();
 			}
 		});
 		toolBar.add(btnColorRed);
 		
-		btnColorGreen = new JButton();
-		btnColorGreen.setEnabled(false);
+		btnColorGreen = new JToggleButton();
 		btnColorGreen.setBounds(0, 0, 100, 100);
+		btnColorGreen.setEnabled(false);
+		btnColorGreen.setFocusable(false);
 		btnColorGreen.setBackground(Color.GREEN);
 		btnColorGreen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (fontColor != Color.GREEN) {
-					fontColor = Color.GREEN;
-					setTextPaneColor(Color.GREEN);
-				}
+				fontColor = Color.GREEN;
+				setTextPaneColor(Color.GREEN);
+				colorButtonSelected();
 			}
 		});
 		toolBar.add(btnColorGreen);
 		
-		btnColorBlue = new JButton();
-		btnColorBlue.setEnabled(false);
+		btnColorBlue = new JToggleButton();
 		btnColorBlue.setBounds(0, 0, 100, 100);
+		btnColorBlue.setEnabled(false);
+		btnColorBlue.setFocusable(false);
 		btnColorBlue.setBackground(Color.BLUE);
 		btnColorBlue.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (fontColor != Color.BLUE) {
-					fontColor = Color.BLUE;
-					setTextPaneColor(Color.BLUE);
-				}
+				fontColor = Color.BLUE;
+				setTextPaneColor(Color.BLUE);
+				colorButtonSelected();
 			}
 		});
 		toolBar.add(btnColorBlue);
 		
-		btnColorOrange = new JButton();
-		btnColorOrange.setEnabled(false);
+		btnColorOrange = new JToggleButton();
 		btnColorOrange.setBounds(0, 0, 100, 100);
+		btnColorOrange.setEnabled(false);
+		btnColorOrange.setFocusable(false);
 		btnColorOrange.setBackground(Color.ORANGE);
 		btnColorOrange.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if (fontColor != Color.ORANGE) {
-					fontColor = Color.ORANGE;
-					setTextPaneColor(Color.ORANGE);
-				}
+				fontColor = Color.ORANGE;
+				setTextPaneColor(Color.ORANGE);
+				colorButtonSelected();
 			}
 		});
 		toolBar.add(btnColorOrange);
@@ -254,10 +268,16 @@ public class EditorView extends JFrame {
 		textPane.setForeground(Color.BLACK);
 		textPane.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		textPane.setEnabled(false);
+		textPane.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent arg0) {
+				getCurrentColor();
+				colorButtonSelected();
+			}
+		});
 		scrollPane.setViewportView(textPane);
 	}
 	
-	private void setTextPaneColor(Color color) {
+	public void setTextPaneColor(Color color) {
         // Get previous attributes, just in case
         MutableAttributeSet attrs = textPane.getInputAttributes();
 
@@ -267,13 +287,19 @@ public class EditorView extends JFrame {
         // Retrieve the pane's document object
         StyledDocument doc = textPane.getStyledDocument();
         
-        doc.setCharacterAttributes(doc.getLength(), 0, attrs, false);
+        int start = textPane.getSelectionStart(),
+        	end = textPane.getSelectionEnd();
+
+		
+        doc.setCharacterAttributes(start, end-start, attrs, false);
 	}
 	
-	private void textPaneAddText(String newText) {
+	public void textPaneAddText(String newText, int offset) {
 		try {
 			StyledDocument doc = textPane.getStyledDocument();
-			doc.insertString(doc.getLength(), newText, textPane.getInputAttributes());
+			if (offset < 0)
+				offset = doc.getLength();
+			doc.insertString(offset, newText, textPane.getInputAttributes());
 		}
 		catch(BadLocationException exc) {
 			exc.printStackTrace();
@@ -286,9 +312,8 @@ public class EditorView extends JFrame {
 		String currentText;
 		for (int i = 0; i < text.size(); i++) {
 			currentText = text.get(i);
-			if(color.size() == text.size())
-				setTextPaneColor(EditorModel.getColor(color.get(i)));
-			textPaneAddText(currentText);
+			setTextPaneColor(EditorModel.getColor(color.get(i)));
+			textPaneAddText(currentText, -1);
 		}
 	}
 	
@@ -305,8 +330,6 @@ public class EditorView extends JFrame {
 		btnSaveAs.setEnabled(value);
 		btnCut.setEnabled(value);
 		btnCopy.setEnabled(value);
-		btnPaste.setEnabled(value);
-		btnRedo.setEnabled(value);
 		
 		btnColorBlack.setEnabled(value);
 		btnColorRed.setEnabled(value);
@@ -315,5 +338,30 @@ public class EditorView extends JFrame {
 		btnColorOrange.setEnabled(value);
 		
 		textPane.setEnabled(value);
+	}
+	
+	public void deleteSelectedText() {
+		int start = textPane.getSelectionStart(),
+			end = textPane.getSelectionEnd();
+		try {
+			getStyledDocument().remove(start, end-start);
+		}
+		catch (BadLocationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void colorButtonSelected() {
+		btnColorBlack.setSelected(fontColor == Color.BLACK);
+		btnColorRed.setSelected(fontColor == Color.RED);
+		btnColorGreen.setSelected(fontColor == Color.GREEN);
+		btnColorBlue.setSelected(fontColor == Color.BLUE);
+		btnColorOrange.setSelected(fontColor == Color.ORANGE);
+	}
+	
+	private void getCurrentColor() {
+		int pos = textPane.getCaretPosition() - 1;
+		LeafElement set = (LeafElement) getStyledDocument().getCharacterElement(pos).getAttributes();
+		fontColor = (Color) set.getAttribute(StyleConstants.Foreground);
 	}
 }
