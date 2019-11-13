@@ -15,7 +15,7 @@ public class EditorController implements ActionListener, Runnable{
 	private final EditorModel model;
 	private final EditorView view;
 	private static boolean editorEnabled = false;
-	private static final int mementoTimeSave = 2000;
+	private static final int mementoTimeSave = 2500;
 	
 	public EditorController(EditorModel model, EditorView view) {
 		super();
@@ -71,8 +71,10 @@ public class EditorController implements ActionListener, Runnable{
 				}
 				
 				
-				if(!editorEnabled)
+				if(!editorEnabled) {
 					view.setEnabled(true);
+					view.btnUndo.setEnabled(true);
+				}
 				else
 					restartTextEditor();
 				
@@ -97,6 +99,13 @@ public class EditorController implements ActionListener, Runnable{
 				catch(Exception ex) {
 					ex.printStackTrace();
 					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.WARNING_MESSAGE);
+				}
+				break;
+				
+			case "Undo":
+				model.loadPreviousMemento();
+				if(model.getOriginator().getMemento() != null) {
+					view.setTextPaneText(model.getOriginator().getMemento().getTextState(), model.getOriginator().getMemento().getColorState());
 				}
 				break;
 				
@@ -129,7 +138,7 @@ public class EditorController implements ActionListener, Runnable{
 	public void run() {
 		try {
 			while (editorEnabled) {
-				model.saveMemento(view.textPane.getText());
+				model.savePreviousMemento(view.getStyledDocument());
 				Thread.sleep(mementoTimeSave);
 			}
 			Thread.currentThread().interrupt();

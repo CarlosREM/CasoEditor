@@ -286,7 +286,8 @@ public class EditorView extends JFrame {
 		String currentText;
 		for (int i = 0; i < text.size(); i++) {
 			currentText = text.get(i);
-			setTextPaneColor(EditorModel.getColor(color.get(i)));
+			if(color.size() == text.size())
+				setTextPaneColor(EditorModel.getColor(color.get(i)));
 			textPaneAddText(currentText);
 		}
 	}

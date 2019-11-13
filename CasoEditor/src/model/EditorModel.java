@@ -22,6 +22,15 @@ public class EditorModel {
 	public EditorModel() {
 		this.originator = new Originator();
 	}
+	
+
+	public Originator getOriginator() {
+		return originator;
+	}
+
+	public void setOriginator(Originator originator) {
+		this.originator = originator;
+	}
 
 	public void openFile() throws Exception {
 		File file = FileManager.openFileChooser();
@@ -35,8 +44,8 @@ public class EditorModel {
 		return TextColor.valueOf(name).getColor();
 	}
 	
-	public void saveMemento(String textSave) {
-		Caretaker.getInstance().addPreviousMemento(originator.createMemento(textSave));
+	public void savePreviousMemento(StyledDocument doc) {
+		Caretaker.getInstance().savePreviousMemento(originator.createMemento(doc));
 	}
 	
 	public void saveDocument(StyledDocument doc, boolean saveAs) throws Exception {
@@ -88,4 +97,7 @@ public class EditorModel {
 		}
 	}
 	
+	public void loadPreviousMemento() {
+		originator.setMemento(Caretaker.getInstance().getPreviousMemento());		
+	}
 }

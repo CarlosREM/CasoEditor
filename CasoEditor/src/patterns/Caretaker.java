@@ -1,6 +1,9 @@
 package patterns;
 
+import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingDeque;
+
+import javax.swing.text.StyledDocument;
 
 public class Caretaker {
 	private LinkedBlockingDeque<Memento> previousMementos;
@@ -19,7 +22,29 @@ public class Caretaker {
 		}
 		return instance;
 	}
-
+	
+	public boolean checkPreviousMementoStateChange(Memento memento) {
+		if(!this.previousMementos.isEmpty()) {
+			ArrayList<String> textState = this.previousMementos.peek().getTextState();
+			for(int i=0; i<textState.size(); i++) {
+				String text = textState.get(i);
+				if(!text.equals(memento.getTextState().get(i)) || memento.getTextState().size() != textState.size()) {
+					System.out.println("Estado anterior: " + text);
+					System.out.println("Estado actual: " + memento.getTextState().get(i));	
+					return true;
+				}
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	public void savePreviousMemento(Memento memento) {
+		if(checkPreviousMementoStateChange(memento)) {
+			addPreviousMemento(memento);
+		}
+	}
+	
 	public void addPreviousMemento(Memento memento) {
 		if(checkMementosSize()) {
 			replaceOldMementos(memento);
@@ -33,7 +58,11 @@ public class Caretaker {
 	}
 	
 	public Memento getPreviousMemento() {
-		return this.previousMementos.pop();
+		if(!this.previousMementos.isEmpty()) {
+			return this.previousMementos.pop();
+			//Poner el statte en el next memento
+		}
+		return null;
 	}
 	
 	public Memento getNextMemento() {
@@ -58,6 +87,5 @@ public class Caretaker {
 	public void restartStacks() {
 		this.previousMementos.clear();
 		this.nextMementos.clear();
-	}
-	
+	}	
 }
