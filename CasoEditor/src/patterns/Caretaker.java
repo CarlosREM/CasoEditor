@@ -29,8 +29,6 @@ public class Caretaker {
 			for(int i=0; i<textState.size(); i++) {
 				String text = textState.get(i);
 				if(!text.equals(memento.getTextState().get(i)) || memento.getTextState().size() != textState.size()) {
-					System.out.println("Estado anterior: " + text);
-					System.out.println("Estado actual: " + memento.getTextState().get(i));	
 					return true;
 				}
 			}
@@ -54,34 +52,44 @@ public class Caretaker {
 	}
 	
 	public void addNextMemento(Memento memento) {
+		if(checkMementosSize()) {
+			replaceNewMementos(memento);
+			return;
+		}
 		this.nextMementos.push(memento);
 	}
 	
-	public Memento getPreviousMemento() {
+	public Memento getPreviousMemento(Memento nextMemento) {
 		if(!this.previousMementos.isEmpty()) {
+			addNextMemento(nextMemento);
 			return this.previousMementos.pop();
-			//Poner el statte en el next memento
 		}
 		return null;
 	}
 	
-	public Memento getNextMemento() {
-		return this.nextMementos.pop();
+	public Memento getNextMemento(Memento memento) {
+		if(!this.nextMementos.isEmpty()) {
+			if(this.previousMementos.peek().getTextState().size() != memento.getTextState().size())
+				this.addPreviousMemento(memento);
+			return this.nextMementos.pop();
+		}
+		return null;
 	}
 	
 	private boolean checkMementosSize() {
-		if(this.previousMementos.size() >= 20) {
+		if(this.previousMementos.size() >= 20 || this.nextMementos.size() >= 20)
 			return true;
-		}else if(this.nextMementos.size() >= 20) {
-			return true;
-		}
 		return false;
 	}
 	
 	private void replaceOldMementos(Memento memento) {
-		Memento reemplazo = this.previousMementos.pollLast();
-		System.out.println("Replace memento: " + reemplazo.getTextState());
+		this.previousMementos.pollLast();
 		this.previousMementos.push(memento);
+	}
+	
+	private void replaceNewMementos(Memento memento) {
+		this.nextMementos.pollLast();
+		this.nextMementos.push(memento);
 	}
 	
 	public void restartStacks() {

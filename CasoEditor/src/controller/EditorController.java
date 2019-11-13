@@ -18,7 +18,7 @@ public class EditorController implements ActionListener, Runnable{
 	private final EditorModel model;
 	private final EditorView view;
 	private static boolean editorEnabled = false;
-	private static final int mementoTimeSave = 2500;
+	private static final int mementoTimeSave = 2000;
 	
 	public EditorController(EditorModel model, EditorView view) {
 		super();
@@ -62,7 +62,7 @@ public class EditorController implements ActionListener, Runnable{
 					view.btnSave.setEnabled(true);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					//ex.printStackTrace();
 					JOptionPane.showMessageDialog(view, "Error on file opening", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
@@ -92,7 +92,7 @@ public class EditorController implements ActionListener, Runnable{
 					model.saveDocument(view.getStyledDocument(), false);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					//ex.printStackTrace();
 					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
@@ -102,13 +102,26 @@ public class EditorController implements ActionListener, Runnable{
 					model.saveDocument(view.getStyledDocument(), true);
 				}
 				catch(Exception ex) {
-					ex.printStackTrace();
+					//ex.printStackTrace();
 					JOptionPane.showMessageDialog(view, "Error on file saving", "Error", JOptionPane.ERROR_MESSAGE);
 				}
 				break;
 				
 			case "Undo":
-				model.loadPreviousMemento();
+				if(!view.btnRedo.isEnabled())
+					view.btnRedo.setEnabled(true);
+				model.loadPreviousMemento(view.getStyledDocument());
+				if(model.getOriginator().getMemento() != null) {
+					view.setTextPaneText(model.getOriginator().getMemento().getTextState(), model.getOriginator().getMemento().getColorState());
+				}
+				if(view.textPane.getText().equals(""))
+					view.btnUndo.setEnabled(false);
+				break;
+				
+			case "Redo":
+				if(!view.btnUndo.isEnabled())
+					view.btnUndo.setEnabled(true);
+				model.loadNextMemento(view.getStyledDocument());
 				if(model.getOriginator().getMemento() != null) {
 					view.setTextPaneText(model.getOriginator().getMemento().getTextState(), model.getOriginator().getMemento().getColorState());
 				}
@@ -142,7 +155,7 @@ public class EditorController implements ActionListener, Runnable{
 				break;
 				
 			default:
-				System.out.println("oops");
+				System.out.println("Este boton no hace nada");
 				break;
 		}
 		
@@ -166,7 +179,7 @@ public class EditorController implements ActionListener, Runnable{
 			Caretaker.getInstance().restartStacks();
 		}
 		catch (InterruptedException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

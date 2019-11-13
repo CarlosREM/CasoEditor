@@ -16,8 +16,6 @@ public class Originator {
 		
 	}
 	
-	
-
 	public Memento getMemento() {
 		return state;
 	}
@@ -46,7 +44,6 @@ public class Originator {
 				else if (color.name() != colors.get(colorIndex)) {
 					text.add(textBuilder.toString());
 					textBuilder = new StringBuilder();
-					
 					colors.add(color.name());
 					colorIndex++;
 				}
@@ -56,12 +53,10 @@ public class Originator {
 			text.add(textBuilder.toString());
 		}
 		catch(Exception ex) {
-			System.out.println("fuck");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 		Memento memento = new Memento(text,colors);
 		setMemento(memento);
 		return memento;
-		
 	}
 }

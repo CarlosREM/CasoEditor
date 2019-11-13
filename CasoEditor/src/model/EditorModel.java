@@ -96,12 +96,15 @@ public class EditorModel {
 			format.addText(textBuilder.toString());
 		}
 		catch(Exception ex) {
-			System.out.println("fuck");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 	}
 	
-	public void loadPreviousMemento() {
-		originator.setMemento(Caretaker.getInstance().getPreviousMemento());		
+	public void loadPreviousMemento(StyledDocument document) {
+		originator.setMemento(Caretaker.getInstance().getPreviousMemento(originator.createMemento(document)));		
+	}
+	
+	public void loadNextMemento(StyledDocument document) {
+		originator.setMemento(Caretaker.getInstance().getNextMemento(originator.createMemento(document)));
 	}
 }
